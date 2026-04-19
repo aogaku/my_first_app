@@ -5,6 +5,14 @@ const scoreElement = document.getElementById("score");
 const livesElement = document.getElementById("lives");
 const messageElement = document.getElementById("message");
 const restartButton = document.getElementById("restartButton");
+const gameOverlayElement = document.getElementById("gameOverlay");
+const overlayEyebrowElement = document.getElementById("overlayEyebrow");
+const overlayTitleElement = document.getElementById("overlayTitle");
+const overlayMessageElement = document.getElementById("overlayMessage");
+const overlayScoreElement = document.getElementById("overlayScore");
+const overlayProgressElement = document.getElementById("overlayProgress");
+const overlayHintElement = document.getElementById("overlayHint");
+const retryButton = document.getElementById("retryButton");
 
 const world = {
   width: 3200,
@@ -48,6 +56,7 @@ const game = {
   state: "playing",
   cameraX: 0,
   message: "旗を目指して進もう！",
+  gameOverReason: "",
 };
 
 const keys = {
@@ -155,6 +164,7 @@ function resetGame() {
   game.state = "playing";
   game.message = "旗を目指して進もう！";
   game.cameraX = 0;
+  game.gameOverReason = "";
 
   for (const item of collectibles) {
     item.collected = false;
@@ -163,6 +173,7 @@ function resetGame() {
   resetEnemies();
   resetPlayerPosition();
   updateHud();
+  updateGameOverlay();
 }
 
 function loseLife(reason) {
@@ -176,14 +187,17 @@ function loseLife(reason) {
     player.vx = 0;
     player.vy = 0;
     game.state = "gameover";
+    game.gameOverReason = reason;
     game.message = `${reason} ゲームオーバー。Rキーかボタンで再挑戦。`;
     updateHud();
+    updateGameOverlay();
     return;
   }
 
   game.message = `${reason} 残りライフは ${game.lives}。`;
   resetPlayerPosition();
   updateHud();
+  updateGameOverlay();
 }
 
 function collectItems() {
@@ -224,6 +238,7 @@ function checkGoal() {
     game.message = `クリア！ 最終スコア ${game.score}`;
     player.vx = 0;
     player.vy = 0;
+    updateGameOverlay();
   }
 }
 
@@ -369,6 +384,56 @@ function updateHud() {
   scoreElement.textContent = String(game.score);
   livesElement.textContent = String(game.lives);
   messageElement.textContent = game.message;
+}
+
+function getProgressPercent() {
+  const progress = clamp(player.x / (goal.x - spawnPoint.x), 0, 1);
+  return Math.round(progress * 100);
+}
+
+function getGameOverHint(reason) {
+  if (reason.includes("敵")) {
+    return "敵の真上を狙って踏みつけると、反動で次の足場にもつなげやすい。";
+  }
+
+  if (reason.includes("トゲ")) {
+    return "ジャンプは少し手前から。頂点が障害物の中央を越えるように合わせると安定する。";
+  }
+
+  if (reason.includes("穴")) {
+    return "次の足場を先に見て、焦らず助走をつけると着地しやすい。";
+  }
+
+  return "コースは覚えるほど有利。今の一回を次の突破口に変えよう。";
+}
+
+function getGameOverLead(progressPercent) {
+  if (progressPercent >= 85) {
+    return "あと少し。今の走りなら、次でクリアが見える。";
+  }
+
+  if (progressPercent >= 55) {
+    return "かなり先まで来ている。ルートはつかめているので、このまま押し切ろう。";
+  }
+
+  return "まだここから。動きに慣れてくると一気に伸びるステージだ。";
+}
+
+function updateGameOverlay() {
+  const isGameOver = game.state === "gameover";
+  gameOverlayElement.hidden = !isGameOver;
+
+  if (!isGameOver) {
+    return;
+  }
+
+  const progressPercent = getProgressPercent();
+  overlayTitleElement.textContent = "ゲームオーバー";
+  overlayEyebrowElement.textContent = progressPercent >= 70 ? "NEAR THE GOAL" : "MISSION FAILED";
+  overlayMessageElement.textContent = `${game.gameOverReason} ${getGameOverLead(progressPercent)}`;
+  overlayScoreElement.textContent = String(game.score);
+  overlayProgressElement.textContent = `${progressPercent}%`;
+  overlayHintElement.textContent = getGameOverHint(game.gameOverReason);
 }
 
 function drawBackground() {
@@ -765,6 +830,11 @@ function drawOverlay() {
 
   context.fillStyle = "rgba(2, 6, 23, 0.58)";
   context.fillRect(0, 0, canvas.width, canvas.height);
+
+  if (game.state === "gameover") {
+    return;
+  }
+
   context.textAlign = "center";
   context.shadowBlur = 20;
   context.shadowColor =
@@ -772,7 +842,7 @@ function drawOverlay() {
   context.fillStyle = "#f8fafc";
   context.font = "bold 44px sans-serif";
   context.fillText(
-    game.state === "won" ? "Stage Clear!" : "Game Over",
+    game.state === "won" ? "ステージクリア" : "ゲームオーバー",
     canvas.width / 2,
     canvas.height / 2 - 24,
   );
@@ -832,7 +902,9 @@ function handleKeyChange(isPressed, event) {
 window.addEventListener("keydown", (event) => handleKeyChange(true, event));
 window.addEventListener("keyup", (event) => handleKeyChange(false, event));
 restartButton.addEventListener("click", resetGame);
+retryButton.addEventListener("click", resetGame);
 
 resetEnemies();
 updateHud();
+updateGameOverlay();
 window.requestAnimationFrame(frame);

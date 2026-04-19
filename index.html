@@ -42,6 +42,31 @@
           ></canvas>
         </div>
 
+        <div id="gameOverlay" class="game-overlay" hidden>
+          <div class="game-overlay__panel" role="alert" aria-live="assertive">
+            <div class="game-overlay__badge" aria-hidden="true">!</div>
+            <p id="overlayEyebrow" class="game-overlay__eyebrow">MISSION FAILED</p>
+            <h2 id="overlayTitle">ゲームオーバー</h2>
+            <p id="overlayMessage" class="game-overlay__message">
+              敵にやられた！ もう一度挑戦しよう。
+            </p>
+            <div class="game-overlay__stats" aria-label="今回のプレイ結果">
+              <div class="game-overlay__stat">
+                <span class="game-overlay__stat-label">SCORE</span>
+                <strong id="overlayScore">0</strong>
+              </div>
+              <div class="game-overlay__stat">
+                <span class="game-overlay__stat-label">PROGRESS</span>
+                <strong id="overlayProgress">0%</strong>
+              </div>
+            </div>
+            <p id="overlayHint" class="game-overlay__hint">
+              タイミングを変えて、すぐに再挑戦しよう。
+            </p>
+            <button id="retryButton" type="button">リトライ</button>
+          </div>
+        </div>
+
         <div class="controls">
           <p><kbd>A</kbd> / <kbd>D</kbd> or <kbd>←</kbd> / <kbd>→</kbd> で移動</p>
           <p><kbd>W</kbd> / <kbd>Space</kbd> / <kbd>↑</kbd> でジャンプ</p>
