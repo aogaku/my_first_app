@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Side Scroll MVP</title>
+    <title>Retro Jump Quest</title>
     <link rel="stylesheet" href="styles.css" />
     <script src="script.js" defer></script>
   </head>
@@ -11,10 +11,10 @@
     <main class="app">
       <section class="panel">
         <div class="panel__copy">
-          <p class="eyebrow">HTML / CSS / JS MVP</p>
-          <h1>横スクロールアクションゲーム</h1>
+          <p class="eyebrow">Retro Jump Quest</p>
+          <h1>レトロジャンプクエスト</h1>
           <p class="description">
-            左右移動、ジャンプ、障害物、ゴールを備えた最小構成です。トゲを避けながらジェムを集めて旗まで進んでください。
+            16-bit 風の横スクロールアクション。敵を踏みつけ、コインみたいなジェムを集めながら、ゴールフラッグまで走り抜けよう。
           </p>
         </div>
 
@@ -44,8 +44,8 @@
 
         <div id="gameOverlay" class="game-overlay" hidden>
           <div class="game-overlay__panel" role="alert" aria-live="assertive">
-            <div class="game-overlay__badge" aria-hidden="true">!</div>
-            <p id="overlayEyebrow" class="game-overlay__eyebrow">MISSION FAILED</p>
+            <div class="game-overlay__badge" aria-hidden="true">1UP</div>
+            <p id="overlayEyebrow" class="game-overlay__eyebrow">NEXT TRY</p>
             <h2 id="overlayTitle">ゲームオーバー</h2>
             <p id="overlayMessage" class="game-overlay__message">
               敵にやられた！ もう一度挑戦しよう。
