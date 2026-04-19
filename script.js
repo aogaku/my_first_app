@@ -35,6 +35,13 @@ const skyline = Array.from({ length: 15 }, (_, index) => ({
   windowOffset: (index % 3) * 4,
 }));
 
+const billboards = [
+  { x: 180, y: 252, width: 108, height: 38, label: "VOID" },
+  { x: 920, y: 232, width: 114, height: 36, label: "NOVA" },
+  { x: 1660, y: 216, width: 128, height: 42, label: "XR-9" },
+  { x: 2420, y: 238, width: 132, height: 40, label: "ZEN" },
+];
+
 const spawnPoint = { x: 80, y: 420 };
 const player = {
   x: spawnPoint.x,
@@ -65,20 +72,20 @@ const keys = {
 };
 
 const solids = [
-  { x: 0, y: 470, width: 420, height: 70, color: "#1f2940", accent: "#38bdf8" },
-  { x: 520, y: 470, width: 480, height: 70, color: "#1f2940", accent: "#38bdf8" },
-  { x: 1100, y: 470, width: 350, height: 70, color: "#1f2940", accent: "#38bdf8" },
-  { x: 1560, y: 470, width: 460, height: 70, color: "#1f2940", accent: "#38bdf8" },
-  { x: 2120, y: 470, width: 980, height: 70, color: "#1f2940", accent: "#38bdf8" },
-  { x: 290, y: 390, width: 130, height: 18, color: "#3b2a63", accent: "#67e8f9" },
-  { x: 690, y: 360, width: 140, height: 18, color: "#3b2a63", accent: "#67e8f9" },
-  { x: 880, y: 300, width: 110, height: 18, color: "#3b2a63", accent: "#67e8f9" },
-  { x: 1210, y: 380, width: 130, height: 18, color: "#3b2a63", accent: "#67e8f9" },
-  { x: 1680, y: 330, width: 120, height: 18, color: "#3b2a63", accent: "#67e8f9" },
-  { x: 1870, y: 270, width: 120, height: 18, color: "#3b2a63", accent: "#67e8f9" },
-  { x: 2230, y: 350, width: 160, height: 18, color: "#3b2a63", accent: "#67e8f9" },
-  { x: 2520, y: 300, width: 120, height: 18, color: "#3b2a63", accent: "#67e8f9" },
-  { x: 2760, y: 250, width: 140, height: 18, color: "#3b2a63", accent: "#67e8f9" },
+  { x: 0, y: 470, width: 420, height: 70, color: "#08111f", accent: "#00f6ff", glow: "#7b61ff" },
+  { x: 520, y: 470, width: 480, height: 70, color: "#08111f", accent: "#00f6ff", glow: "#7b61ff" },
+  { x: 1100, y: 470, width: 350, height: 70, color: "#08111f", accent: "#00f6ff", glow: "#7b61ff" },
+  { x: 1560, y: 470, width: 460, height: 70, color: "#08111f", accent: "#00f6ff", glow: "#7b61ff" },
+  { x: 2120, y: 470, width: 980, height: 70, color: "#08111f", accent: "#00f6ff", glow: "#7b61ff" },
+  { x: 290, y: 390, width: 130, height: 18, color: "#190c34", accent: "#ff37e3", glow: "#00f6ff" },
+  { x: 690, y: 360, width: 140, height: 18, color: "#190c34", accent: "#ff37e3", glow: "#00f6ff" },
+  { x: 880, y: 300, width: 110, height: 18, color: "#190c34", accent: "#ff37e3", glow: "#00f6ff" },
+  { x: 1210, y: 380, width: 130, height: 18, color: "#190c34", accent: "#ff37e3", glow: "#00f6ff" },
+  { x: 1680, y: 330, width: 120, height: 18, color: "#190c34", accent: "#ff37e3", glow: "#00f6ff" },
+  { x: 1870, y: 270, width: 120, height: 18, color: "#190c34", accent: "#ff37e3", glow: "#00f6ff" },
+  { x: 2230, y: 350, width: 160, height: 18, color: "#190c34", accent: "#ff37e3", glow: "#00f6ff" },
+  { x: 2520, y: 300, width: 120, height: 18, color: "#190c34", accent: "#ff37e3", glow: "#00f6ff" },
+  { x: 2760, y: 250, width: 140, height: 18, color: "#190c34", accent: "#ff37e3", glow: "#00f6ff" },
 ];
 
 const hazards = [
@@ -439,32 +446,44 @@ function updateGameOverlay() {
 function drawBackground() {
   const animationTime = getAnimationTime();
   const sky = context.createLinearGradient(0, 0, 0, canvas.height);
-  sky.addColorStop(0, "#030713");
-  sky.addColorStop(0.28, "#0d1c45");
-  sky.addColorStop(0.62, "#312e81");
-  sky.addColorStop(1, "#f97316");
+  sky.addColorStop(0, "#03030a");
+  sky.addColorStop(0.22, "#081029");
+  sky.addColorStop(0.58, "#210a42");
+  sky.addColorStop(1, "#110914");
   context.fillStyle = sky;
   context.fillRect(0, 0, canvas.width, canvas.height);
 
   context.save();
-  context.globalAlpha = 0.75;
-  context.fillStyle = "rgba(167, 139, 250, 0.18)";
+  context.globalAlpha = 0.86;
+  context.fillStyle = "rgba(255, 55, 227, 0.14)";
   context.beginPath();
-  context.ellipse(canvas.width * 0.52, 96, 260, 54, -0.08, 0, Math.PI * 2);
+  context.ellipse(canvas.width * 0.48, 96, 280, 58, -0.08, 0, Math.PI * 2);
   context.fill();
-  context.fillStyle = "rgba(103, 232, 249, 0.15)";
+  context.fillStyle = "rgba(0, 246, 255, 0.12)";
   context.beginPath();
-  context.ellipse(canvas.width * 0.42, 122, 220, 40, 0.15, 0, Math.PI * 2);
+  context.ellipse(canvas.width * 0.64, 118, 240, 44, 0.12, 0, Math.PI * 2);
   context.fill();
   context.restore();
 
-  const moonX = canvas.width - 170 - game.cameraX * 0.04;
+  const moonX = canvas.width - 190 - game.cameraX * 0.05;
   context.save();
-  context.shadowColor = "rgba(103, 232, 249, 0.35)";
-  context.shadowBlur = 36;
-  context.fillStyle = "#dbeafe";
+  context.shadowColor = "rgba(255, 55, 227, 0.42)";
+  context.shadowBlur = 42;
+  context.strokeStyle = "#ff5ce2";
+  context.lineWidth = 10;
   context.beginPath();
-  context.arc(moonX, 92, 38, 0, Math.PI * 2);
+  context.arc(moonX, 98, 52, 0, Math.PI * 2);
+  context.stroke();
+  context.shadowColor = "rgba(0, 246, 255, 0.32)";
+  context.shadowBlur = 30;
+  context.strokeStyle = "#00f6ff";
+  context.lineWidth = 3;
+  context.beginPath();
+  context.arc(moonX, 98, 64, 0.22, Math.PI * 1.82);
+  context.stroke();
+  context.fillStyle = "rgba(8, 4, 24, 0.78)";
+  context.beginPath();
+  context.arc(moonX, 98, 39, 0, Math.PI * 2);
   context.fill();
   context.restore();
 
@@ -474,13 +493,14 @@ function drawBackground() {
       continue;
     }
 
-    context.fillStyle = `rgba(255, 255, 255, ${star.alpha})`;
+    const alpha = star.alpha * (0.9 + Math.sin(animationTime * 3 + star.x * 0.02) * 0.25);
+    context.fillStyle = `rgba(255, 255, 255, ${alpha})`;
     context.beginPath();
     context.arc(x, star.y, star.radius, 0, Math.PI * 2);
     context.fill();
 
     if (star.radius > 2) {
-      context.strokeStyle = `rgba(103, 232, 249, ${star.alpha * 0.55})`;
+      context.strokeStyle = `rgba(0, 246, 255, ${alpha * 0.65})`;
       context.beginPath();
       context.moveTo(x - 4, star.y);
       context.lineTo(x + 4, star.y);
@@ -491,9 +511,24 @@ function drawBackground() {
   }
 
   context.save();
-  context.fillStyle = "rgba(2, 6, 23, 0.34)";
+  for (let i = 0; i < 6; i += 1) {
+    const beamX = i * 210 - (game.cameraX * 0.1 % 210) - 140;
+    const beamGradient = context.createLinearGradient(beamX, 0, beamX + 160, canvas.height);
+    beamGradient.addColorStop(0, "rgba(0, 246, 255, 0.08)");
+    beamGradient.addColorStop(1, "rgba(255, 55, 227, 0)");
+    context.fillStyle = beamGradient;
+    context.beginPath();
+    context.moveTo(beamX, 0);
+    context.lineTo(beamX + 140, 0);
+    context.lineTo(beamX + 20, canvas.height);
+    context.lineTo(beamX - 120, canvas.height);
+    context.closePath();
+    context.fill();
+  }
+
+  context.fillStyle = "rgba(3, 7, 21, 0.48)";
   for (let i = 0; i < 8; i += 1) {
-    const x = i * 220 - (game.cameraX * 0.16 % 220) - 120;
+    const x = i * 230 - (game.cameraX * 0.16 % 230) - 120;
     context.beginPath();
     context.moveTo(x, 430);
     context.lineTo(x + 110, 210);
@@ -502,7 +537,7 @@ function drawBackground() {
     context.fill();
   }
 
-  context.fillStyle = "rgba(15, 23, 42, 0.62)";
+  context.fillStyle = "rgba(9, 10, 25, 0.78)";
   for (let i = 0; i < 9; i += 1) {
     const x = i * 180 - (game.cameraX * 0.26 % 180) - 90;
     context.beginPath();
@@ -515,22 +550,33 @@ function drawBackground() {
   context.restore();
 
   context.save();
-  context.fillStyle = "rgba(5, 10, 28, 0.88)";
-  for (const building of skyline) {
+  for (const [index, building] of skyline.entries()) {
     const x = building.x - game.cameraX * 0.4;
     const y = 428 - building.height;
     if (x + building.width < -40 || x > canvas.width + 40) {
       continue;
     }
 
+    const towerGradient = context.createLinearGradient(x, y, x, y + building.height);
+    towerGradient.addColorStop(0, "rgba(20, 17, 44, 0.95)");
+    towerGradient.addColorStop(1, "rgba(3, 7, 21, 0.98)");
+    context.fillStyle = towerGradient;
     context.fillRect(x, y, building.width, building.height);
-    context.fillStyle = "rgba(103, 232, 249, 0.32)";
+    context.fillStyle = "rgba(0, 246, 255, 0.14)";
+    context.fillRect(x + building.width * 0.18, y - 10, 2, 10);
+
     for (let column = 0; column < 4; column += 1) {
       for (let row = 0; row < 5; row += 1) {
         if ((column + row + building.windowOffset) % 2 !== 0) {
           continue;
         }
 
+        const windowColors = [
+          "rgba(0, 246, 255, 0.46)",
+          "rgba(255, 55, 227, 0.42)",
+          "rgba(123, 97, 255, 0.44)",
+        ];
+        context.fillStyle = windowColors[(column + row + index) % windowColors.length];
         context.fillRect(
           x + 12 + column * 18,
           y + 16 + row * 22,
@@ -539,24 +585,58 @@ function drawBackground() {
         );
       }
     }
-    context.fillStyle = "rgba(5, 10, 28, 0.88)";
+
+    if (index % 3 === 0) {
+      context.fillStyle = "rgba(255, 55, 227, 0.22)";
+      context.fillRect(x + 10, y + 18, building.width - 20, 4);
+    }
+  }
+
+  for (const [index, sign] of billboards.entries()) {
+    const x = sign.x - game.cameraX * 0.38;
+    if (x + sign.width < -40 || x > canvas.width + 40) {
+      continue;
+    }
+
+    const glowColor = index % 2 === 0 ? "rgba(0, 246, 255, 0.55)" : "rgba(255, 55, 227, 0.55)";
+    context.save();
+    context.shadowColor = glowColor;
+    context.shadowBlur = 22;
+    context.fillStyle = "rgba(8, 12, 26, 0.94)";
+    context.fillRect(x, sign.y, sign.width, sign.height);
+    context.strokeStyle = glowColor;
+    context.lineWidth = 2;
+    context.strokeRect(x, sign.y, sign.width, sign.height);
+    context.fillStyle = index % 2 === 0 ? "#00f6ff" : "#ff5ce2";
+    context.font = "bold 18px sans-serif";
+    context.textAlign = "center";
+    context.textBaseline = "middle";
+    context.fillText(sign.label, x + sign.width / 2, sign.y + sign.height / 2 + 1);
+    context.restore();
   }
   context.restore();
 
-  const horizonGlow = context.createLinearGradient(0, 250, 0, canvas.height);
-  horizonGlow.addColorStop(0, "rgba(244, 114, 182, 0)");
-  horizonGlow.addColorStop(0.5, "rgba(244, 114, 182, 0.08)");
-  horizonGlow.addColorStop(1, "rgba(14, 116, 144, 0.28)");
+  const horizonGlow = context.createLinearGradient(0, 230, 0, canvas.height);
+  horizonGlow.addColorStop(0, "rgba(255, 55, 227, 0)");
+  horizonGlow.addColorStop(0.5, "rgba(255, 55, 227, 0.1)");
+  horizonGlow.addColorStop(1, "rgba(0, 246, 255, 0.24)");
   context.fillStyle = horizonGlow;
-  context.fillRect(0, 250, canvas.width, canvas.height - 250);
+  context.fillRect(0, 230, canvas.width, canvas.height - 230);
 
   const fog = context.createLinearGradient(0, 350, 0, canvas.height);
-  fog.addColorStop(0, "rgba(6, 11, 26, 0)");
-  fog.addColorStop(1, "rgba(6, 11, 26, 0.42)");
+  fog.addColorStop(0, "rgba(7, 8, 24, 0)");
+  fog.addColorStop(1, "rgba(7, 8, 24, 0.56)");
   context.fillStyle = fog;
   context.fillRect(0, 350, canvas.width, canvas.height - 350);
 
-  context.fillStyle = `rgba(255, 255, 255, ${0.02 + (Math.sin(animationTime * 2) + 1) * 0.01})`;
+  context.fillStyle = "rgba(0, 246, 255, 0.18)";
+  context.fillRect(0, 434, canvas.width, 3);
+  context.fillStyle = "rgba(255, 55, 227, 0.1)";
+  for (let index = 0; index < canvas.width; index += 42) {
+    context.fillRect(index, 438, 18, 2);
+  }
+
+  context.fillStyle = `rgba(255, 255, 255, ${0.014 + (Math.sin(animationTime * 2) + 1) * 0.008})`;
   context.fillRect(0, 0, canvas.width, canvas.height);
 }
 
@@ -567,6 +647,7 @@ function drawWorld() {
   context.translate(-game.cameraX, 0);
 
   for (const solid of solids) {
+    const glowColor = solid.glow || solid.accent;
     const solidGradient = context.createLinearGradient(
       solid.x,
       solid.y,
@@ -574,11 +655,16 @@ function drawWorld() {
       solid.y + solid.height,
     );
     solidGradient.addColorStop(0, solid.accent);
-    solidGradient.addColorStop(0.1, solid.color);
-    solidGradient.addColorStop(1, "#0f172a");
+    solidGradient.addColorStop(0.08, glowColor);
+    solidGradient.addColorStop(0.15, solid.color);
+    solidGradient.addColorStop(1, "#050811");
 
+    context.save();
+    context.shadowColor = glowColor;
+    context.shadowBlur = solid.height > 30 ? 16 : 12;
     context.fillStyle = solidGradient;
     context.fillRect(solid.x, solid.y, solid.width, solid.height);
+    context.restore();
 
     context.fillStyle = "rgba(255, 255, 255, 0.12)";
     context.fillRect(solid.x, solid.y, solid.width, 3);
@@ -586,16 +672,24 @@ function drawWorld() {
     context.fillStyle = solid.accent;
     context.fillRect(solid.x + 8, solid.y + 5, solid.width - 16, 3);
 
-    context.fillStyle = "rgba(2, 6, 23, 0.35)";
+    context.fillStyle = "rgba(255, 55, 227, 0.16)";
+    context.fillRect(solid.x + 10, solid.y + 11, solid.width - 20, 2);
+
+    context.fillStyle = "rgba(2, 6, 23, 0.45)";
     context.fillRect(solid.x + 6, solid.y + solid.height - 8, solid.width - 12, 6);
+
+    context.fillStyle = "rgba(0, 246, 255, 0.08)";
+    for (let stripX = solid.x + 16; stripX < solid.x + solid.width - 12; stripX += 28) {
+      context.fillRect(stripX, solid.y + 8, 2, solid.height - 18);
+    }
   }
 
   for (const hazard of hazards) {
     context.save();
-    context.shadowColor = "rgba(251, 113, 133, 0.45)";
-    context.shadowBlur = 18;
-    context.fillStyle = "rgba(127, 29, 29, 0.52)";
-    context.fillRect(hazard.x - 6, hazard.y + 6, hazard.width + 12, hazard.height);
+    context.shadowColor = "rgba(255, 55, 227, 0.42)";
+    context.shadowBlur = 20;
+    context.fillStyle = "rgba(48, 8, 46, 0.54)";
+    context.fillRect(hazard.x - 8, hazard.y + 8, hazard.width + 16, hazard.height);
 
     const spikeCount = Math.floor(hazard.width / 16);
     for (let index = 0; index < spikeCount; index += 1) {
@@ -606,8 +700,9 @@ function drawWorld() {
         spikeX,
         hazard.y + hazard.height,
       );
-      spikeGradient.addColorStop(0, "#fb7185");
-      spikeGradient.addColorStop(1, "#991b1b");
+      spikeGradient.addColorStop(0, "#00f6ff");
+      spikeGradient.addColorStop(0.45, "#ff5ce2");
+      spikeGradient.addColorStop(1, "#4b1247");
       context.fillStyle = spikeGradient;
       context.beginPath();
       context.moveTo(spikeX, hazard.y + hazard.height);
@@ -615,6 +710,12 @@ function drawWorld() {
       context.lineTo(spikeX + 16, hazard.y + hazard.height);
       context.closePath();
       context.fill();
+
+      context.strokeStyle = "rgba(255, 255, 255, 0.45)";
+      context.beginPath();
+      context.moveTo(spikeX + 8, hazard.y + 3);
+      context.lineTo(spikeX + 11, hazard.y + hazard.height - 3);
+      context.stroke();
     }
     context.restore();
   }
@@ -629,14 +730,23 @@ function drawWorld() {
     const pulse = 1 + Math.sin(animationTime * 6 + item.x * 0.05) * 0.16;
 
     context.save();
-    context.shadowColor = "rgba(250, 204, 21, 0.45)";
-    context.shadowBlur = 18;
-    context.fillStyle = `rgba(250, 204, 21, ${0.22 * pulse})`;
+    context.shadowColor = "rgba(0, 246, 255, 0.42)";
+    context.shadowBlur = 20;
+    context.fillStyle = `rgba(0, 246, 255, ${0.18 * pulse})`;
     context.beginPath();
     context.arc(centerX, centerY, item.size * 0.92 * pulse, 0, Math.PI * 2);
     context.fill();
 
-    context.fillStyle = "#fef08a";
+    const gemGradient = context.createLinearGradient(
+      centerX,
+      centerY - item.size / 2,
+      centerX,
+      centerY + item.size / 2,
+    );
+    gemGradient.addColorStop(0, "#00f6ff");
+    gemGradient.addColorStop(0.5, "#9e8cff");
+    gemGradient.addColorStop(1, "#ff5ce2");
+    context.fillStyle = gemGradient;
     context.beginPath();
     context.moveTo(centerX, centerY - item.size / 2);
     context.lineTo(centerX + item.size / 2, centerY);
@@ -661,7 +771,7 @@ function drawWorld() {
     }
 
     const hoverOffset = Math.sin(animationTime * 5 + enemy.x * 0.02) * 1.5;
-    const eyeX = enemy.facing > 0 ? enemy.x + 21 : enemy.x + 9;
+    const eyeX = enemy.facing > 0 ? enemy.x + 23 : enemy.x + 8;
 
     context.save();
     context.fillStyle = "rgba(2, 6, 23, 0.4)";
@@ -677,51 +787,59 @@ function drawWorld() {
     );
     context.fill();
 
-    const shellGradient = context.createLinearGradient(
+    context.shadowColor = "rgba(255, 55, 227, 0.35)";
+    context.shadowBlur = 14;
+    context.fillStyle = "#070d20";
+    context.fillRect(enemy.x + 6, enemy.y + 16 + hoverOffset, enemy.width - 12, 18);
+
+    const droneGradient = context.createLinearGradient(
       enemy.x,
-      enemy.y,
-      enemy.x,
-      enemy.y + enemy.height,
+      enemy.y + hoverOffset,
+      enemy.x + enemy.width,
+      enemy.y + enemy.height + hoverOffset,
     );
-    shellGradient.addColorStop(0, "#fb7185");
-    shellGradient.addColorStop(0.45, "#f97316");
-    shellGradient.addColorStop(1, "#7c2d12");
+    droneGradient.addColorStop(0, "#00f6ff");
+    droneGradient.addColorStop(0.5, "#7b61ff");
+    droneGradient.addColorStop(1, "#ff5ce2");
+    context.fillStyle = droneGradient;
+    context.fillRect(enemy.x + 3, enemy.y + 8 + hoverOffset, enemy.width - 6, 10);
+    context.fillRect(enemy.x, enemy.y + 20 + hoverOffset, enemy.width, 10);
 
-    context.shadowColor = "rgba(251, 113, 133, 0.35)";
-    context.shadowBlur = 12;
-    context.fillStyle = shellGradient;
-    context.fillRect(enemy.x, enemy.y + hoverOffset, enemy.width, enemy.height);
+    context.fillStyle = "#0d1329";
+    context.fillRect(enemy.x + 4, enemy.y + 22 + hoverOffset, enemy.width - 8, 8);
 
+    context.fillStyle = "#f8fbff";
+    context.fillRect(enemy.x + 8, enemy.y + 10 + hoverOffset, enemy.width - 16, 4);
+
+    context.fillStyle = "#ff5ce2";
+    context.fillRect(enemy.x + 2, enemy.y + 30 + hoverOffset, 6, 6);
+    context.fillRect(enemy.x + enemy.width - 8, enemy.y + 30 + hoverOffset, 6, 6);
+
+    context.fillStyle = "#00f6ff";
+    context.fillRect(enemy.x + enemy.width / 2 - 3, enemy.y + enemy.height - 7 + hoverOffset, 6, 7);
     context.fillStyle = "#020617";
-    context.fillRect(enemy.x + 5, enemy.y + 10 + hoverOffset, enemy.width - 10, 14);
-
-    context.fillStyle = "#fde68a";
-    context.fillRect(enemy.x + 4, enemy.y + enemy.height - 10 + hoverOffset, 10, 10);
-    context.fillRect(enemy.x + enemy.width - 14, enemy.y + enemy.height - 10 + hoverOffset, 10, 10);
-
-    context.fillStyle = "#f8fafc";
-    context.fillRect(enemy.x + 8, enemy.y + 6 + hoverOffset, enemy.width - 16, 6);
-
-    context.fillStyle = "#020617";
-    context.fillRect(eyeX, enemy.y + 14 + hoverOffset, 5, 5);
-    context.fillRect(enemy.x + enemy.width / 2 - 2, enemy.y + 24 + hoverOffset, 4, 4);
+    context.fillRect(eyeX, enemy.y + 23 + hoverOffset, 5, 4);
     context.restore();
   }
 
   context.save();
-  context.shadowColor = "rgba(103, 232, 249, 0.45)";
-  context.shadowBlur = 16;
-  context.fillStyle = "#dbeafe";
-  context.fillRect(goal.x, goal.y, 6, goal.height);
-  context.fillStyle = "#67e8f9";
+  context.shadowColor = "rgba(0, 246, 255, 0.48)";
+  context.shadowBlur = 20;
+  context.strokeStyle = "#00f6ff";
+  context.lineWidth = 6;
+  context.strokeRect(goal.x - 10, goal.y, 24, goal.height);
+  context.strokeStyle = "rgba(255, 55, 227, 0.75)";
+  context.lineWidth = 2;
+  context.strokeRect(goal.x - 18, goal.y - 8, 40, goal.height + 16);
+  context.fillStyle = "#00f6ff";
   context.fillRect(goal.x - 6, goal.y + goal.height - 20, 18, 20);
-  const flagGradient = context.createLinearGradient(goal.x + 6, goal.y, goal.x + 82, goal.y + 42);
-  flagGradient.addColorStop(0, "#a78bfa");
-  flagGradient.addColorStop(1, "#22d3ee");
+  const flagGradient = context.createLinearGradient(goal.x + 6, goal.y, goal.x + 92, goal.y + 42);
+  flagGradient.addColorStop(0, "#ff5ce2");
+  flagGradient.addColorStop(1, "#00f6ff");
   context.fillStyle = flagGradient;
   context.beginPath();
   context.moveTo(goal.x + 6, goal.y);
-  context.lineTo(goal.x + 82, goal.y + 24);
+  context.lineTo(goal.x + 92, goal.y + 24);
   context.lineTo(goal.x + 6, goal.y + 50);
   context.closePath();
   context.fill();
@@ -765,14 +883,17 @@ function drawWorld() {
     player.x,
     player.y + player.height,
   );
-  armorGradient.addColorStop(0, "#67e8f9");
-  armorGradient.addColorStop(0.5, "#38bdf8");
-  armorGradient.addColorStop(1, "#1d4ed8");
+  armorGradient.addColorStop(0, "#00f6ff");
+  armorGradient.addColorStop(0.48, "#5c7cff");
+  armorGradient.addColorStop(1, "#220d53");
+  context.shadowColor = "rgba(0, 246, 255, 0.34)";
+  context.shadowBlur = 18;
   context.fillStyle = armorGradient;
   context.fillRect(player.x, player.y, player.width, player.height);
 
-  context.fillStyle = "#e0f2fe";
-  context.fillRect(player.x + 6, player.y + 6, player.width - 12, 10);
+  context.shadowBlur = 0;
+  context.fillStyle = "#e3fcff";
+  context.fillRect(player.x + 6, player.y + 6, player.width - 12, 8);
 
   context.fillStyle = "#0f172a";
   context.fillRect(player.x + 5, player.y + 20, player.width - 10, 20);
@@ -783,13 +904,16 @@ function drawWorld() {
     player.x + player.width - 4,
     player.y + 22,
   );
-  visorGradient.addColorStop(0, "#f8fafc");
-  visorGradient.addColorStop(1, "#67e8f9");
+  visorGradient.addColorStop(0, "#ff9bf4");
+  visorGradient.addColorStop(1, "#00f6ff");
   context.fillStyle = visorGradient;
   context.fillRect(player.x + 5, player.y + 12, player.width - 10, 8);
 
-  context.fillStyle = "#f472b6";
+  context.fillStyle = "#ff5ce2";
   context.fillRect(player.x + 8, player.y + 28, player.width - 16, 5);
+
+  context.fillStyle = "#00f6ff";
+  context.fillRect(player.x + 9, player.y + 34, player.width - 18, 3);
 
   context.fillStyle = "#e2e8f0";
   context.fillRect(player.x + 5, player.y + player.height - 10, 8, 10);
@@ -813,14 +937,26 @@ function drawScreenFx() {
     canvas.width * 0.72,
   );
   vignette.addColorStop(0, "rgba(255, 255, 255, 0)");
-  vignette.addColorStop(1, "rgba(2, 6, 23, 0.38)");
+  vignette.addColorStop(1, "rgba(1, 3, 12, 0.5)");
   context.fillStyle = vignette;
   context.fillRect(0, 0, canvas.width, canvas.height);
 
-  context.fillStyle = "rgba(148, 163, 184, 0.06)";
+  const topGlow = context.createLinearGradient(0, 0, canvas.width, 0);
+  topGlow.addColorStop(0, "rgba(255, 55, 227, 0.08)");
+  topGlow.addColorStop(0.5, "rgba(0, 246, 255, 0.06)");
+  topGlow.addColorStop(1, "rgba(123, 97, 255, 0.08)");
+  context.fillStyle = topGlow;
+  context.fillRect(0, 0, canvas.width, 12);
+
+  context.fillStyle = "rgba(173, 184, 255, 0.06)";
   for (let y = 0; y < canvas.height; y += 4) {
     context.fillRect(0, y, canvas.width, 1);
   }
+
+  context.fillStyle = "rgba(0, 246, 255, 0.04)";
+  context.fillRect(0, 0, 4, canvas.height);
+  context.fillStyle = "rgba(255, 55, 227, 0.04)";
+  context.fillRect(canvas.width - 4, 0, 4, canvas.height);
 }
 
 function drawOverlay() {
