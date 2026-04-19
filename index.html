@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Side Scroll MVP</title>
+    <link rel="stylesheet" href="styles.css" />
+    <script src="script.js" defer></script>
+  </head>
+  <body>
+    <main class="app">
+      <section class="panel">
+        <div class="panel__copy">
+          <p class="eyebrow">HTML / CSS / JS MVP</p>
+          <h1>横スクロールアクションゲーム</h1>
+          <p class="description">
+            左右移動、ジャンプ、障害物、ゴールを備えた最小構成です。トゲを避けながらジェムを集めて旗まで進んでください。
+          </p>
+        </div>
+
+        <div class="hud">
+          <div class="hud__item">
+            <span class="hud__label">ライフ</span>
+            <strong id="lives">3</strong>
+          </div>
+          <div class="hud__item">
+            <span class="hud__label">スコア</span>
+            <strong id="score">0</strong>
+          </div>
+          <div class="hud__item hud__item--wide">
+            <span class="hud__label">ステータス</span>
+            <strong id="message">旗を目指して進もう！</strong>
+          </div>
+        </div>
+
+        <div class="stage">
+          <canvas
+            id="game"
+            width="960"
+            height="540"
+            aria-label="横スクロールアクションゲーム"
+          ></canvas>
+        </div>
+
+        <div class="controls">
+          <p><kbd>A</kbd> / <kbd>D</kbd> or <kbd>←</kbd> / <kbd>→</kbd> で移動</p>
+          <p><kbd>W</kbd> / <kbd>Space</kbd> / <kbd>↑</kbd> でジャンプ</p>
+          <button id="restartButton" type="button">リスタート</button>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>

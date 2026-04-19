@@ -1,1 +1,3 @@
-# my_first_app
+# my-first-app
+
+ここは説明などを書く場所です
